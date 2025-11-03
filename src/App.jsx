@@ -1,28 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
+import HomePage from './components/HomePage'
+import Pages from './components/Pages'
 
-function App() {
-  const [count, setCount] = useState(0)
+const colors = {
+  bg: '#FAFAF7',
+}
+
+export default function App() {
+  const [route, setRoute] = useState(window.location.hash || '#/')
+
+  useEffect(() => {
+    const onHash = () => setRoute(window.location.hash || '#/')
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
-          Vibe Coding Platform
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Your AI-powered development environment
-        </p>
-        <div className="text-center">
-          <button
-            onClick={() => setCount(count + 1)}
-            className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-          >
-            Count is {count}
-          </button>
-        </div>
+    <div dir="rtl" className="min-h-screen flex flex-col" style={{ backgroundColor: colors.bg }}>
+      <Navbar />
+      <div className="flex-1">
+        {route === '#/' ? <HomePage /> : <Pages route={route} />}
       </div>
+      <Footer />
     </div>
   )
 }
-
-export default App
